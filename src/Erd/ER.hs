@@ -153,18 +153,21 @@ data Cardinality = ZeroOne
     | One
     | ZeroPlus
     | OnePlus
+    | ToOne
     deriving (Eq)
 
 instance Show Cardinality where
   show ZeroOne  = "{0,1}"
-  show One      = "1"
-  show ZeroPlus = "0..N"
-  show OnePlus  = "1..N"
+  show One      = "1..1"
+  show ZeroPlus = "0..*"
+  show OnePlus  = "1..*"
+  show ToOne    = "> 1..1"
 
 -- | Maps a string representation to a particular relationship cardinality.
 cardByName :: Char -> Maybe Cardinality
 cardByName '?' = Just ZeroOne
 cardByName '1' = Just One
+cardByName '@' = Just ToOne
 cardByName '*' = Just ZeroPlus
 cardByName '+' = Just OnePlus
 cardByName _   = Nothing
